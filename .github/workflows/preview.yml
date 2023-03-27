@@ -20,3 +20,4 @@ jobs:
           preview-branch: gh-pages
           umbrella-dir: pr-preview
           action: auto
+          github_token: ${{ secrets.ASTRO_TEST }}
