@@ -14,10 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: npm i && npm run build
-      - uses: rossjrw/pr-preview-action@v1
+      - uses: rossjrw/pr-preview-action@v1.3.0
+
         with:
           source-dir: .
           preview-branch: gh-pages
           umbrella-dir: pr-preview
           action: auto
-          github_token: ${{ secrets.ASTRO_TEST }}
