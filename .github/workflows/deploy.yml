@@ -1,42 +1,17 @@
-name: Github Pages Astro CI
-
+# .github/workflows/deploy.yml
+name: Deploy PR previews
 on:
-  # `main`ブランチにプッシュするたびにワークフローを起動させる
-  # 別のブランチ名を使う場合は`main`をあなたのブランチ名で置き換えてください。
   push:
-    branches: [main]
-  # GitHubのActionsタブから、このワークフローを手動で実行できるようにします。
-  workflow_dispatch:
-
+    branches:
+      - main
 jobs:
-  deploy:
-    runs-on: ubuntu-20.04
-
-    # このジョブがあなたのリポジトリに変更をプッシュすることを許可する
-    permissions:
-      contents: write
-
+  deploy-preview:
+    runs-on: ubuntu-latest
     steps:
-      - name: Check out your repository using git
-        uses: actions/checkout@v2
-
-      - name: Use Node.js 16
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - run: npm i && npm run build
+      - uses: JamesIves/github-pages-deploy-action@v4
         with:
-          node-version: 16
-
-      # npmを使っていない場合、`npm ci`を`yarn install`や`pnpm i`に置き換えてください。
-      - name: Install dependencies
-        run: npm ci
-
-      # npmを使っていない場合、`npm run build`を`yarn build`や`pnpm run build`に置き換えてください。
-      - name: Build Astro
-        run: npm run build
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          # `./dist`はAstroがデフォルトでアウトプットするディレクトリです。
-          # 変更した場合は、こちらも更新してください。
-          publish_dir: ./dist
+          folder: .
+          branch: gh-pages
+          clean-exclude: pr-preview
